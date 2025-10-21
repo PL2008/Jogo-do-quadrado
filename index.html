@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACEP - Achados e Perdidos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-escuro: #1e3a8a;
+            --azul-claro: #3b82f6;
+            --azul-mais-claro: #60a5fa;
+            --branco: #ffffff;
+            --cinza-claro: #f8fafc;
+            --cinza: #e2e8f0;
+            --cinza-escuro: #64748b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: var(--cinza-claro);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* Tela de Login */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--azul-escuro), var(--azul-claro));
+            padding: 20px;
+        }
+        
+        .login-card {
+            background-color: var(--branco);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--azul-escuro), var(--azul-claro));
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            color: var(--azul-escuro);
+        }
+        
+        .logo i {
+            font-size: 32px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .login-card h2 {
+            color: var(--azul-escuro);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .login-card p {
+            color: var(--cinza-escuro);
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--azul-escuro);
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--cinza-escuro);
+        }
+        
+        .input-with-icon input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 1px solid var(--cinza);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .input-with-icon input:focus {
+            border-color: var(--azul-claro);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--azul-claro);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--azul-escuro);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-google {
+            background-color: white;
+            color: #444;
+            border: 1px solid var(--cinza);
+        }
+        
+        .btn-google:hover {
+            background-color: #f8fafc;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .btn-google img {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+        }
+        
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: var(--cinza);
+        }
+        
+        .divider span {
+            padding: 0 15px;
+            color: var(--cinza-escuro);
+            font-size: 14px;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: rgba(231, 76, 60, 0.1);
+            border-radius: 8px;
+            display: none;
+        }
+        
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+        
+        .header {
+            background-color: var(--branco);
+            color: var(--azul-escuro);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo-small {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 20px;
+        }
+        
+        .logo-small i {
+            margin-right: 10px;
+            color: var(--azul-claro);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--azul-claro);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .logout-btn {
+            background-color: transparent;
+            border: 1px solid var(--cinza);
+            color: var(--cinza-escuro);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: #fef2f2;
+            color: #ef4444;
+            border-color: #fecaca;
+        }
+        
+        .main-content {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+        
+        .sidebar {
+            width: 260px;
+            background-color: var(--branco);
+            padding: 25px 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .sidebar ul {
+            list-style: none;
+        }
+        
+        .sidebar li {
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--cinza-escuro);
+            font-weight: 500;
+        }
+        
+        .sidebar li:hover {
+            background-color: var(--cinza-claro);
+            color: var(--azul-escuro);
+        }
+        
+        .sidebar li.active {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--azul-claro);
+            border-right: 3px solid var(--azul-claro);
+        }
+        
+        .sidebar li i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .content {
+            flex: 1;
+            padding: 30px;
+            background-color: var(--cinza-claro);
+            overflow-y: auto;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .section-title {
+            color: var(--azul-escuro);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--cinza);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: var(--azul-claro);
+        }
+        
+        /* Formulário de Anúncio */
+        .announce-form {
+            max-width: 700px;
+            background-color: var(--branco);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--cinza);
+            border-radius: 8px;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 120px;
+            transition: all 0.3s;
+        }
+        
+        textarea:focus {
+            border-color: var(--azul-claro);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--cinza);
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: white;
+            transition: all 0.3s;
+        }
+        
+        select:focus {
+            border-color: var(--azul-claro);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+        
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-upload-btn {
+            background-color: var(--cinza-claro);
+            color: var(--cinza-escuro);
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: 1px dashed var(--cinza);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .file-upload-btn:hover {
+            background-color: var(--cinza);
+        }
+        
+        .file-upload input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        /* Lista de Itens */
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .item-card {
+            background-color: var(--branco);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .item-image {
+            height: 180px;
+            background: linear-gradient(135deg, var(--azul-claro), var(--azul-escuro));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+        }
+        
+        .item-details {
+            padding: 20px;
+        }
+        
+        .item-title {
+            font-weight: 600;
+            color: var(--azul-escuro);
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+        
+        .item-category {
+            color: var(--azul-claro);
+            font-size: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .item-description {
+            font-size: 14px;
+            color: var(--cinza-escuro);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .item-date {
+            font-size: 12px;
+            color: var(--cinza-escuro);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Sistema de Chat */
+        .chat-container {
+            display: flex;
+            height: 600px;
+            border: 1px solid var(--cinza);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .chat-list {
+            width: 320px;
+            border-right: 1px solid var(--cinza);
+            overflow-y: auto;
+            background-color: var(--branco);
+        }
+        
+        .chat-header {
+            padding: 20px;
+            background-color: var(--azul-claro);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .chat-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--cinza);
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .chat-item:hover, .chat-item.active {
+            background-color: var(--cinza-claro);
+        }
+        
+        .chat-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--azul-mais-claro);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        .chat-info {
+            flex: 1;
+        }
+        
+        .chat-user {
+            font-weight: 600;
+            color: var(--azul-escuro);
+            margin-bottom: 4px;
+        }
+        
+        .chat-preview {
+            font-size: 14px;
+            color: var(--cinza-escuro);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .chat-time {
+            font-size: 12px;
+            color: var(--cinza-escuro);
+        }
+        
+        .chat-messages {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--branco);
+        }
+        
+        .messages-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f0f4f8;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            max-width: 70%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message.received {
+            align-self: flex-start;
+        }
+        
+        .message.sent {
+            align-self: flex-end;
+        }
+        
+        .message-bubble {
+            padding: 12px 16px;
+            border-radius: 18px;
+            position: relative;
+        }
+        
+        .message.received .message-bubble {
+            background-color: var(--branco);
+            border-top-left-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .message.sent .message-bubble {
+            background-color: var(--azul-claro);
+            color: white;
+            border-top-right-radius: 5px;
+        }
+        
+        .message-time {
+            font-size: 11px;
+            color: var(--cinza-escuro);
+            margin-top: 5px;
+            align-self: flex-end;
+        }
+        
+        .message.sent .message-time {
+            align-self: flex-start;
+        }
+        
+        .message-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid var(--cinza);
+            background-color: white;
+        }
+        
+        .message-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--cinza);
+            border-radius: 24px;
+            margin-right: 10px;
+            font-size: 15px;
+        }
+        
+        .message-input input:focus {
+            outline: none;
+            border-color: var(--azul-claro);
+        }
+        
+        .send-btn {
+            background-color: var(--azul-claro);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .send-btn:hover {
+            background-color: var(--azul-escuro);
+            transform: scale(1.05);
+        }
+        
+        /* Responsividade */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 220px;
+            }
+            
+            .chat-list {
+                width: 280px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 15px 0;
+            }
+            
+            .sidebar ul {
+                display: flex;
+                overflow-x: auto;
+                padding: 0 15px;
+            }
+            
+            .sidebar li {
+                padding: 12px 20px;
+                white-space: nowrap;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .chat-container {
+                flex-direction: column;
+                height: 500px;
+            }
+            
+            .chat-list {
+                width: 100%;
+                height: 180px;
+                border-right: none;
+                border-bottom: 1px solid var(--cinza);
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 30px 20px;
+            }
+            
+            .header {
+                padding: 15px 20px;
+            }
+            
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Login -->
+    <div class="login-container" id="loginScreen">
+        <div class="login-card">
+            <div class="logo">
+                <i class="fas fa-search"></i>
+                <h1>ACEP</h1>
+            </div>
+            <h2>Bem-vindo de volta</h2>
+            <p>Faça login para acessar sua conta</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" placeholder="Digite seu e-mail" value="teste@gmail.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="Digite sua senha" value="1234">
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Entrar
+                </button>
+            </form>
+            
+            <div class="divider">
+                <span>ou</span>
+            </div>
+            
+            <button class="btn btn-google" id="googleLoginBtn">
+                <i class="fab fa-google"></i>
+                Entrar com Google
+            </button>
+            
+            <div class="error-message" id="errorMessage">
+                <i class="fas fa-exclamation-circle"></i>
+                E-mail ou senha incorretos
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <div class="header">
+            <div class="logo-small">
+                <i class="fas fa-search"></i>
+                ACEP
+            </div>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">UT</div>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </button>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="sidebar">
+                <ul>
+                    <li class="active" data-tab="announce">
+                        <i class="fas fa-bullhorn"></i>
+                        Anunciar Item
+                    </li>
+                    <li data-tab="my-items">
+                        <i class="fas fa-list"></i>
+                        Meus Itens
+                    </li>
+                    <li data-tab="found-items">
+                        <i class="fas fa-search"></i>
+                        Itens Encontrados
+                    </li>
+                    <li data-tab="chat">
+                        <i class="fas fa-comments"></i>
+                        Conversas
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="content">
+                <!-- Anunciar Item -->
+                <div class="tab-content active" id="announce">
+                    <h2 class="section-title">
+                        <i class="fas fa-bullhorn"></i>
+                        Anunciar Item Perdido
+                    </h2>
+                    <form class="announce-form" id="announceForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="itemName">Nome do Item</label>
+                                <input type="text" id="itemName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="itemCategory">Categoria</label>
+                                <select id="itemCategory" required>
+                                    <option value="">Selecione uma categoria</option>
+                                    <option value="documentos">Documentos</option>
+                                    <option value="eletronicos">Eletrônicos</option>
+                                    <option value="vestuario">Vestuário</option>
+                                    <option value="acessorios">Acessórios</option>
+                                    <option value="outros">Outros</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="itemDescription">Descrição</label>
+                            <textarea id="itemDescription" placeholder="Descreva o item em detalhes..." required></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="lostDate">Data da Perda</label>
+                                <input type="date" id="lostDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lostLocation">Local da Perda</label>
+                                <input type="text" id="lostLocation" placeholder="Onde o item foi perdido?" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="itemImage">Imagem do Item</label>
+                            <div class="file-upload">
+                                <button type="button" class="file-upload-btn">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    Escolher arquivo
+                                </button>
+                                <input type="file" id="itemImage" accept="image/*">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                            Anunciar Item
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Meus Itens -->
+                <div class="tab-content" id="my-items">
+                    <h2 class="section-title">
+                        <i class="fas fa-list"></i>
+                        Meus Itens Perdidos
+                    </h2>
+                    <div class="items-grid" id="myItemsGrid">
+                        <!-- Itens serão carregados dinamicamente -->
+                    </div>
+                </div>
+                
+                <!-- Itens Encontrados -->
+                <div class="tab-content" id="found-items">
+                    <h2 class="section-title">
+                        <i class="fas fa-search"></i>
+                        Itens Encontrados
+                    </h2>
+                    <div class="items-grid" id="foundItemsGrid">
+                        <!-- Itens serão carregados dinamicamente -->
+                    </div>
+                </div>
+                
+                <!-- Conversas -->
+                <div class="tab-content" id="chat">
+                    <h2 class="section-title">
+                        <i class="fas fa-comments"></i>
+                        Conversas
+                    </h2>
+                    <div class="chat-container">
+                        <div class="chat-list">
+                            <div class="chat-header">Conversas</div>
+                            <div id="chatList">
+                                <!-- Lista de conversas será carregada dinamicamente -->
+                            </div>
+                        </div>
+                        
+                        <div class="chat-messages">
+                            <div class="messages-area" id="messagesArea">
+                                <!-- Mensagens serão carregadas dinamicamente -->
+                            </div>
+                            
+                            <div class="message-input">
+                                <input type="text" id="messageInput" placeholder="Digite sua mensagem...">
+                                <button class="send-btn" id="sendMessageBtn">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados de exemplo
+        const sampleItems = [
+            {
+                id: 1,
+                title: "Carteira Preta",
+                category: "acessorios",
+                description: "Carteira de couro preta contendo documentos e cartões.",
+                date: "2023-10-15",
+                location: "Shopping Center",
+                image: null,
+                userId: "user1"
+            },
+            {
+                id: 2,
+                title: "Fone de Ouvido Bluetooth",
+                category: "eletronicos",
+                description: "Fone de ouvido sem fio da marca JBL, cor preta.",
+                date: "2023-10-18",
+                location: "Parque Central",
+                image: null,
+                userId: "user2"
+            },
+            {
+                id: 3,
+                title: "Chave de Casa",
+                category: "outros",
+                description: "Chave com chaveiro de borracha do Mickey.",
+                date: "2023-10-20",
+                location: "Estação de Metrô",
+                image: null,
+                userId: "user3"
+            }
+        ];
+
+        const sampleChats = [
+            {
+                id: 1,
+                userId: "user2",
+                userName: "Maria Silva",
+                userInitials: "MS",
+                lastMessage: "Encontrei um item que pode ser seu",
+                timestamp: "10:30"
+            },
+            {
+                id: 2,
+                userId: "user3",
+                userName: "João Santos",
+                userInitials: "JS",
+                lastMessage: "Onde você perdeu sua carteira?",
+                timestamp: "09:15"
+            }
+        ];
+
+        const sampleMessages = {
+            1: [
+                { id: 1, text: "Olá, encontrei uma carteira preta no shopping. É sua?", sender: "user2", time: "10:30" },
+                { id: 2, text: "Sim! Pode me descrever melhor?", sender: "current", time: "10:32" },
+                { id: 3, text: "É de couro e tem um documento com seu nome.", sender: "user2", time: "10:33" }
+            ],
+            2: [
+                { id: 1, text: "Oi, vi seu anúncio sobre a carteira perdida.", sender: "user3", time: "09:15" },
+                { id: 2, text: "Onde você a viu pela última vez?", sender: "user3", time: "09:16" }
+            ]
+        };
+
+        // Elementos DOM
+        const loginScreen = document.getElementById('loginScreen');
+        const dashboard = document.getElementById('dashboard');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const googleLoginBtn = document.getElementById('googleLoginBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userAvatar = document.getElementById('userAvatar');
+        const sidebarItems = document.querySelectorAll('.sidebar li');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const announceForm = document.getElementById('announceForm');
+        const myItemsGrid = document.getElementById('myItemsGrid');
+        const foundItemsGrid = document.getElementById('foundItemsGrid');
+        const chatList = document.getElementById('chatList');
+        const messagesArea = document.getElementById('messagesArea');
+        const messageInput = document.getElementById('messageInput');
+        const sendMessageBtn = document.getElementById('sendMessageBtn');
+
+        // Estado da aplicação
+        let currentUser = null;
+        let userItems = [];
+        let activeChat = null;
+
+        // Funções de autenticação
+        function login(email, password) {
+            if (email === 'teste@gmail.com' && password === '1234') {
+                currentUser = {
+                    name: 'Usuário Teste',
+                    email: email,
+                    initials: 'UT'
+                };
+                return true;
+            }
+            return false;
+        }
+
+        function loginWithGoogle() {
+            // Simulação de login com Google
+            currentUser = {
+                name: 'Usuário Google',
+                email: 'usuario.google@gmail.com',
+                initials: 'UG'
+            };
+            return true;
+        }
+
+        function showDashboard() {
+            loginScreen.style.display = 'none';
+            dashboard.style.display = 'block';
+            userAvatar.textContent = currentUser.initials;
+            loadUserItems();
+            loadFoundItems();
+            loadChats();
+        }
+
+        function showLogin() {
+            dashboard.style.display = 'none';
+            loginScreen.style.display = 'flex';
+            emailInput.value = 'teste@gmail.com';
+            passwordInput.value = '1234';
+            errorMessage.style.display = 'none';
+        }
+
+        // Evento de login
+        loginBtn.addEventListener('click', function() {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            
+            if (login(email, password)) {
+                showDashboard();
+            } else {
+                errorMessage.style.display = 'block';
+            }
+        });
+
+        // Evento de login com Google
+        googleLoginBtn.addEventListener('click', function() {
+            if (loginWithGoogle()) {
+                showDashboard();
+            }
+        });
+
+        // Evento de logout
+        logoutBtn.addEventListener('click', function() {
+            currentUser = null;
+            showLogin();
+        });
+
+        // Navegação entre abas
+        sidebarItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Atualiza a aba ativa na sidebar
+                sidebarItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Mostra o conteúdo correspondente
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    if (content.id === tabId) {
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // Formulário de anúncio
+        announceForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const itemName = document.getElementById('itemName').value;
+            const itemCategory = document.getElementById('itemCategory').value;
+            const itemDescription = document.getElementById('itemDescription').value;
+            const lostDate = document.getElementById('lostDate').value;
+            const lostLocation = document.getElementById('lostLocation').value;
+            const itemImage = document.getElementById('itemImage').files[0];
+            
+            const newItem = {
+                id: Date.now(),
+                title: itemName,
+                category: itemCategory,
+                description: itemDescription,
+                date: lostDate,
+                location: lostLocation,
+                image: itemImage,
+                userId: 'current'
+            };
+            
+            userItems.push(newItem);
+            sampleItems.push(newItem);
+            
+            // Limpa o formulário
+            announceForm.reset();
+            
+            // Recarrega os itens do usuário
+            loadUserItems();
+            
+            // Mostra mensagem de sucesso
+            alert('Item anunciado com sucesso!');
+        });
+
+        // Carregar itens do usuário
+        function loadUserItems() {
+            myItemsGrid.innerHTML = '';
+            
+            const userItems = sampleItems.filter(item => item.userId === 'current');
+            
+            if (userItems.length === 0) {
+                myItemsGrid.innerHTML = '<p>Você ainda não anunciou nenhum item.</p>';
+                return;
+            }
+            
+            userItems.forEach(item => {
+                const itemCard = createItemCard(item);
+                myItemsGrid.appendChild(itemCard);
+            });
+        }
+
+        // Carregar itens encontrados
+        function loadFoundItems() {
+            foundItemsGrid.innerHTML = '';
+            
+            const foundItems = sampleItems.filter(item => item.userId !== 'current');
+            
+            if (foundItems.length === 0) {
+                foundItemsGrid.innerHTML = '<p>Nenhum item encontrado disponível no momento.</p>';
+                return;
+            }
+            
+            foundItems.forEach(item => {
+                const itemCard = createItemCard(item);
+                
+                // Adiciona botão de contato
+                const contactBtn = document.createElement('button');
+                contactBtn.className = 'btn btn-primary';
+                contactBtn.style.marginTop = '10px';
+                contactBtn.style.width = '100%';
+                contactBtn.innerHTML = '<i class="fas fa-comment"></i> Entrar em Contato';
+                contactBtn.addEventListener('click', function() {
+                    // Navega para a aba de chat e inicia conversa
+                    document.querySelector('[data-tab="chat"]').click();
+                    startChat(item.userId, `Conversa sobre: ${item.title}`);
+                });
+                
+                itemCard.querySelector('.item-details').appendChild(contactBtn);
+                foundItemsGrid.appendChild(itemCard);
+            });
+        }
+
+        // Criar card de item
+        function createItemCard(item) {
+            const itemCard = document.createElement('div');
+            itemCard.className = 'item-card';
+            
+            const categoryNames = {
+                'documentos': 'Documentos',
+                'eletronicos': 'Eletrônicos',
+                'vestuario': 'Vestuário',
+                'acessorios': 'Acessórios',
+                'outros': 'Outros'
+            };
+            
+            const categoryIcons = {
+                'documentos': 'fas fa-id-card',
+                'eletronicos': 'fas fa-laptop',
+                'vestuario': 'fas fa-tshirt',
+                'acessorios': 'fas fa-key',
+                'outros': 'fas fa-box'
+            };
+            
+            itemCard.innerHTML = `
+                <div class="item-image">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="item-details">
+                    <div class="item-title">${item.title}</div>
+                    <div class="item-category">
+                        <i class="${categoryIcons[item.category] || 'fas fa-box'}"></i>
+                        ${categoryNames[item.category] || item.category}
+                    </div>
+                    <div class="item-description">${item.description}</div>
+                    <div class="item-date">
+                        <i class="far fa-calendar"></i>
+                        Perdido em: ${formatDate(item.date)} - ${item.location}
+                    </div>
+                </div>
+            `;
+            
+            return itemCard;
+        }
+
+        // Formatar data
+        function formatDate(dateString) {
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('pt-BR', options);
+        }
+
+        // Carregar conversas
+        function loadChats() {
+            chatList.innerHTML = '';
+            
+            sampleChats.forEach(chat => {
+                const chatItem = document.createElement('div');
+                chatItem.className = 'chat-item';
+                chatItem.setAttribute('data-chat-id', chat.id);
+                
+                chatItem.innerHTML = `
+                    <div class="chat-avatar">${chat.userInitials}</div>
+                    <div class="chat-info">
+                        <div class="chat-user">${chat.userName}</div>
+                        <div class="chat-preview">${chat.lastMessage}</div>
+                    </div>
+                    <div class="chat-time">${chat.timestamp}</div>
+                `;
+                
+                chatItem.addEventListener('click', function() {
+                    // Marca como ativa
+                    document.querySelectorAll('.chat-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Carrega as mensagens
+                    loadMessages(chat.id);
+                    activeChat = chat.id;
+                });
+                
+                chatList.appendChild(chatItem);
+            });
+        }
+
+        // Carregar mensagens
+        function loadMessages(chatId) {
+            messagesArea.innerHTML = '';
+            
+            const messages = sampleMessages[chatId] || [];
+            
+            messages.forEach(message => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${message.sender === 'current' ? 'sent' : 'received'}`;
+                
+                messageDiv.innerHTML = `
+                    <div class="message-bubble">${message.text}</div>
+                    <div class="message-time">${message.time}</div>
+                `;
+                
+                messagesArea.appendChild(messageDiv);
+            });
+            
+            // Rola para a última mensagem
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+        }
+
+        // Enviar mensagem
+        sendMessageBtn.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const messageText = messageInput.value.trim();
+            
+            if (!messageText || !activeChat) return;
+            
+            // Adiciona a mensagem à lista
+            if (!sampleMessages[activeChat]) {
+                sampleMessages[activeChat] = [];
+            }
+            
+            const newMessage = {
+                id: sampleMessages[activeChat].length + 1,
+                text: messageText,
+                sender: 'current',
+                time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+            };
+            
+            sampleMessages[activeChat].push(newMessage);
+            
+            // Atualiza a visualização
+            loadMessages(activeChat);
+            
+            // Limpa o campo de entrada
+            messageInput.value = '';
+        }
+
+        // Iniciar nova conversa
+        function startChat(userId, initialMessage) {
+            // Verifica se já existe uma conversa com este usuário
+            let existingChat = sampleChats.find(chat => chat.userId === userId);
+            
+            if (!existingChat) {
+                // Cria nova conversa
+                const newChatId = sampleChats.length + 1;
+                existingChat = {
+                    id: newChatId,
+                    userId: userId,
+                    userName: 'Novo Contato',
+                    userInitials: 'NC',
+                    lastMessage: initialMessage,
+                    timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+                };
+                
+                sampleChats.push(existingChat);
+                sampleMessages[newChatId] = [];
+                
+                // Recarrega a lista de conversas
+                loadChats();
+            }
+            
+            // Navega para a conversa
+            document.querySelector(`.chat-item[data-chat-id="${existingChat.id}"]`).click();
+        }
+
+        // Inicialização
+        showLogin();
+    </script>
+</body>
+</html>
